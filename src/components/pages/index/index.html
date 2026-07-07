@@ -1,0 +1,143 @@
+<script type="module" src="@components/pages/index/index.js"></script>
+<link rel="stylesheet" href="@components/pages/index/index.scss">
+
+<main class="page">
+	<div class="page__container">
+
+		<div class="game">
+			<!-- Main area: sidebar left + drum + sidebar right -->
+			<div class="game__main">
+				<!-- Left sidebar -->
+				<div class="game__sidebar game__sidebar--left">
+					<div class="sidebar-left__inner">
+						<div class="logo">
+							<img src="@img/logo.webp" alt="Game logo" fetchpriority="high">
+						</div>
+
+						<div class="jackpots" id="jackpots">
+							<div class="jackpot jackpot--grand">
+								<span class="jackpot__label">GRAND</span>
+								<div class="jackpot__border">
+									<span class="jackpot__value">1000.00</span>
+								</div>
+							</div>
+							<div class="jackpot jackpot--major">
+								<span class="jackpot__label">MAJOR</span>
+								<div class="jackpot__border">
+									<span class="jackpot__value">100.00</span>
+								</div>
+							</div>
+							<div class="jackpot jackpot--minor">
+								<span class="jackpot__label">MINOR</span>
+								<div class="jackpot__border">
+									<span class="jackpot__value">30.00</span>
+								</div>
+							</div>
+							<div class="jackpot jackpot--mini">
+								<span class="jackpot__label">MINI</span>
+								<div class="jackpot__border">
+									<span class="jackpot__value">15.00</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="sidebar-left__coins">
+							<img src="@img/coins.webp" alt="coins">
+							<button class="bonus-btn menu__button-bonus" data-fls-dynamic=".game__mobile-wrap, 767.98, first">
+								<span class="bonus-btn__icon"></span>
+								<span class="bonus-btn__label">BONUS</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Drum -->
+				<div class="game__field">
+					<div class="drum">
+						<!-- Center win-line highlight overlay -->
+						<div class="drum__payline"></div>
+						<div class="drum__spinner">
+							<div class="drum__column">
+								<div class="drum__image"><img src="@img/icon/icon-1.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-2.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-3.webp" alt="Icon game"></div>
+							</div>
+							<div class="drum__column">
+								<div class="drum__image"><img src="@img/icon/icon-5.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-6.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-7.webp" alt="Icon game"></div>
+							</div>
+							<div class="drum__column">
+								<div class="drum__image"><img src="@img/icon/icon-1.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-2.webp" alt="Icon game"></div>
+								<div class="drum__image"><img src="@img/icon/icon-3.webp" alt="Icon game"></div>
+							</div>
+						</div>
+					</div>
+
+					<!-- For mobile blocks -->
+					<div class="game__mobile-wrap"></div>
+				</div>
+
+				
+
+				<!-- Right sidebar -->
+				<div class="game__sidebar game__sidebar--right">
+					<a href="#" class="side-btn side-btn--autoplay menu__button-autoplay">
+						<span class="side-btn__icon side-btn__icon--autoplay"></span>
+					</a>
+					<a href="#" class="side-btn side-btn--turbo menu__button-spin">
+						<span class="side-btn__icon side-btn__icon--turbo"></span>
+					</a>
+					<a href="#" class="side-btn side-btn--fast menu__button-auto">
+						<span class="side-btn__icon side-btn__icon--fast"></span>
+					</a>
+				</div>
+			</div>
+
+			<!-- Bottom info bar -->
+			<div class="menu">
+				<div class="menu__info-block">
+					<span class="menu__info-label">CREDIT</span>
+					<span class="menu__info-value menu__info"><span class="number">1000.00</span></span>
+				</div>
+				<div class="menu__info-block last-win" data-fls-dynamic=".game__main, 767.98, last">
+					<span class="menu__info-label">LAST WIN</span>
+					<span class="menu__info-value menu__info-win"><span class="number">0.00</span></span>
+				</div>
+				<div class="menu__bet-control" data-fls-dynamic=".game__main, 767.98, last">
+					<button class="menu__bet-arrow menu__button-arrow reduce" aria-label="Decrease bet">−</button>
+					<div class="menu__bet-center">
+						<span class="menu__info-label">BET</span>
+						<span class="menu__info-value menu__bet-value"><span class="number">1.00</span></span>
+					</div>
+					<button class="menu__bet-arrow menu__button-arrow increase" aria-label="Increase bet">+</button>
+				</div>
+				<div class="menu__actions">
+					<a href="#" class="menu__sound-btn menu__sound side-btn side-btn--sound">
+						<span class="side-btn__icon side-btn__icon--sound"></span>
+					</a>
+					<button class="menu__action-btn" aria-label="Info">
+						<span class="menu__action-icon menu__action-icon--info"></span>
+					</button>
+					<button class="menu__action-btn" aria-label="Menu">
+						<span class="menu__action-icon menu__action-icon--hamburger"></span>
+					</button>
+				</div>
+				<!-- Hidden element needed by JS for showCTA -->
+				<div class="menu__bottom hidden"></div>
+			</div>
+		</div>
+
+		<div class="popup">
+			<div class="popup__overlay"></div>
+			<div class="popup__content">
+				<div class="popup__inner">
+					<h2 class="popup__title">Congratulations!</h2>
+					<p class="popup__text">Ready to continue playing?</p>
+					<a class="cta-button" href="#">Download Now</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
