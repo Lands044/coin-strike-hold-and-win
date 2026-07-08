@@ -462,7 +462,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		background: url('../../../assets/img/drum.webp') center/cover no-repeat;
 	}
 
-	@media (max-width:toEm(1220)){
+	@media (max-width:toEm(1260)), (min-width:toEm(1480)){
 		border: vw(3) solid $gold;
 		box-shadow: 0 0 vw(20) rgba(255, 185, 33, 0.5), inset 0 0 vw(10) rgba(255, 185, 33, 0.2);
 		border-radius: vw(12);
@@ -499,7 +499,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		gap: vw(4);
 		padding: vw(4) vw(20);
 
-		@media (max-width:toEm(1220)) {
+		@media (max-width:toEm(1260)), (min-width:toEm(1480)){
 			border: vw(3) solid #34373e;
 			box-shadow: 0 0 vw(8) rgba(254, 133, 28, 0.5);
 			padding: vw(4);
@@ -526,7 +526,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		border-radius: vw(6);
 		height: vw(465);
 
-		@media (max-width:toEm(1220)) {
+		@media (max-width:toEm(1260)), (min-width:toEm(1480)) {
 			border: vw(2) solid rgba(255, 185, 33, 0.3);
 		}
 

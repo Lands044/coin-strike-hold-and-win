@@ -74,6 +74,9 @@ class SlotMachine {
 			spin: new Audio(`${this.baseUrl}assets/sound/spin.mp3`),
 			win: new Audio(`${this.baseUrl}assets/sound/win.mp3`)
 		};
+		// Завантажуємо метадані заздалегідь, щоб знати тривалість spin.mp3 до першого спіну
+		this.sounds.spin.preload = 'auto';
+		this.sounds.spin.load();
 
 		// Фонова музика (безкінечний повтор)
 		this.musicTrack = new Audio(`${this.baseUrl}assets/sound/play-music.mp3`);
@@ -438,19 +441,32 @@ class SlotMachine {
 	// Анімація обертання всіх колонок
 	async spin(result) {
 		const columns = this.drumSpinner.querySelectorAll('.drum__column');
-		const duration = 3000;
+		const cascadeDelay = 100;
+
+		// Підганяємо тривалість обертання під довжину звуку spin.mp3,
+		// щоб останній барабан зупинявся синхронно із закінченням звуку
+		const totalSpinTime = this.getSpinSoundDuration();
+		const lastColIndex = columns.length - 1;
+		const duration = Math.max(500, totalSpinTime - lastColIndex * cascadeDelay);
 
 		// Запускаємо анімацію кожної колонки з затримкою
 		const spinPromises = Array.from(columns).map((column, colIndex) => {
 			return new Promise((resolve) => {
 				setTimeout(() => {
 					this.spinColumn(column, result.result[colIndex], duration, colIndex);
-					setTimeout(resolve, duration + (colIndex * 100));
-				}, colIndex * 100);
+					setTimeout(resolve, duration + (colIndex * cascadeDelay));
+				}, colIndex * cascadeDelay);
 			});
 		});
 
 		await Promise.all(spinPromises);
+	}
+
+	// Тривалість звуку spin.mp3 у мілісекундах (з фолбеком, поки метадані не завантажені)
+	getSpinSoundDuration() {
+		const sound = this.sounds.spin;
+		const seconds = sound && sound.duration && !isNaN(sound.duration) ? sound.duration : 3;
+		return seconds * 1000;
 	}
 
 	// Анімація обертання однієї колонки
