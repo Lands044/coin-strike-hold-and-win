@@ -1315,148 +1315,134 @@ function initBackgroundLightning() {
 
 	const canvas = document.createElement('canvas');
 	canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
-	page.style.position = 'relative';
 	page.prepend(canvas);
 
 	const ctx = canvas.getContext('2d');
 	const bolts = [];
 
 	function resize() {
-		canvas.width  = page.offsetWidth;
+		canvas.width = page.offsetWidth;
 		canvas.height = page.offsetHeight;
 	}
 	resize();
 	window.addEventListener('resize', resize);
 
-	// Catmull-Rom smooth path
-	function drawSmooth(pts) {
-		if (pts.length < 2) return;
-		ctx.beginPath();
-		ctx.moveTo(pts[0].x, pts[0].y);
-		for (let i = 0; i < pts.length - 1; i++) {
-			const p0 = pts[i - 1] || pts[i];
-			const p1 = pts[i];
-			const p2 = pts[i + 1];
-			const p3 = pts[i + 2] || p2;
-			const cp1x = p1.x + (p2.x - p0.x) / 6;
-			const cp1y = p1.y + (p2.y - p0.y) / 6;
-			const cp2x = p2.x - (p3.x - p1.x) / 6;
-			const cp2y = p2.y - (p3.y - p1.y) / 6;
-			ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
-		}
-		ctx.stroke();
-	}
+	// Реалістичний зигзаг: рекурсивний поділ відрізку з відхиленням
+	function makeBolt(ox, oy, tx, ty, spread, depth) {
+		if (depth === 0) return [{ x: ox, y: oy }, { x: tx, y: ty }];
 
-	// Build bolt from origin toward a target with persistent chaotic deviation
-	function makeBolt(ox, oy, tx, ty, chaos = 1) {
-		const pts = [{ x: ox, y: oy }];
-		const segments = 6 + Math.floor(Math.random() * 5);
-		// Perpendicular vector for sideways jitter
+		const mx = (ox + tx) / 2;
+		const my = (oy + ty) / 2;
+
+		// Перпендикулярне відхилення
 		const dx = tx - ox;
 		const dy = ty - oy;
 		const len = Math.sqrt(dx * dx + dy * dy) || 1;
 		const px = -dy / len;
-		const py =  dx / len;
+		const py = dx / len;
+		const offset = (Math.random() - 0.5) * spread;
 
-		for (let i = 1; i <= segments; i++) {
-			const t = i / segments;
-			const lx = ox + dx * t;
-			const ly = oy + dy * t;
-			// Constant spread along the whole bolt, no shrinking near end
-			const jitter  = (Math.random() - 0.5) * 120 * chaos;
-			const jitter2 = (Math.random() - 0.5) * 40  * chaos;
-			pts.push({
-				x: lx + px * jitter  + (Math.random() - 0.5) * 20 * chaos,
-				y: ly + py * jitter  + jitter2
-			});
-		}
-		// Last point snaps close to target with small offset
-		pts.push({
-			x: tx + (Math.random() - 0.5) * 20 * chaos,
-			y: ty + (Math.random() - 0.5) * 20 * chaos
-		});
-		return pts;
+		const midX = mx + px * offset;
+		const midY = my + py * offset;
+
+		const left = makeBolt(ox, oy, midX, midY, spread * 0.55, depth - 1);
+		const right = makeBolt(midX, midY, tx, ty, spread * 0.55, depth - 1);
+
+		// об'єднуємо без дублювання midpoint
+		return [...left, ...right.slice(1)];
 	}
 
 	function spawnBolt() {
 		const w = canvas.width;
 		const h = canvas.height;
 
-		// Target: random point near center with some spread
-		const tx = w * 0.3 + Math.random() * w * 0.4;
-		const ty = h * 0.25 + Math.random() * h * 0.5;
-
-		// Origin: edge of screen (top, left, or right)
+		// Хаотичний старт — будь-який край або кут екрану
+		const side = Math.floor(Math.random() * 4); // 0=top,1=bottom,2=left,3=right
 		let ox, oy;
-		const side = Math.floor(Math.random() * 3); // 0=top, 1=left, 2=right
-		if (side === 0) {
-			ox = w * 0.1 + Math.random() * w * 0.8;
-			oy = 0;
-		} else if (side === 1) {
-			ox = 0;
-			oy = h * 0.05 + Math.random() * h * 0.5;
-		} else {
-			ox = w;
-			oy = h * 0.05 + Math.random() * h * 0.5;
-		}
+		if (side === 0) { ox = Math.random() * w; oy = 0; }
+		else if (side === 1) { ox = Math.random() * w; oy = h; }
+		else if (side === 2) { ox = 0; oy = Math.random() * h; }
+		else { ox = w; oy = Math.random() * h; }
 
-		const pts = makeBolt(ox, oy, tx, ty, 1);
+		// Ціль — хаотична точка по всьому екрану (не тільки центр)
+		const tx = Math.random() * w;
+		const ty = Math.random() * h;
 
-		// Optional single branch from mid-point
-		let branch = null;
-		if (Math.random() > 0.5) {
-			const midIdx = Math.floor(pts.length * (0.3 + Math.random() * 0.3));
-			const mp = pts[midIdx];
-			const btx = mp.x + (Math.random() - 0.5) * 140;
-			const bty = mp.y + 60 + Math.random() * 120;
-			branch = makeBolt(mp.x, mp.y, btx, bty, 0.7);
+		const dist = Math.sqrt((tx - ox) ** 2 + (ty - oy) ** 2);
+		// Spread пропорційний довжині, але невеликий — блискавки вузькі
+		const spread = dist * (0.15 + Math.random() * 0.2);
+
+		const pts = makeBolt(ox, oy, tx, ty, spread, 6);
+
+		// 1-3 гілки від різних точок
+		const branches = [];
+		const branchCount = Math.floor(Math.random() * 3) + 1;
+		for (let b = 0; b < branchCount; b++) {
+			const idx = Math.floor(pts.length * (0.2 + Math.random() * 0.5));
+			const mp = pts[idx];
+			const bDist = dist * (0.1 + Math.random() * 0.2);
+			const angle = Math.random() * Math.PI * 2;
+			const bPts = makeBolt(
+				mp.x, mp.y,
+				mp.x + Math.cos(angle) * bDist,
+				mp.y + Math.sin(angle) * bDist,
+				bDist * 0.25, 4
+			);
+			branches.push(bPts);
 		}
 
 		bolts.push({
 			pts,
-			branch,
-			alpha:    0,
-			phase:    'in',
-			fadeIn:   0.022 + Math.random() * 0.018,
-			holdFor:  3 + Math.floor(Math.random() * 5),
+			branches,
+			alpha: 0,
+			phase: 'in',
+			fadeIn: 0.04 + Math.random() * 0.03,
+			holdFor: 6 + Math.floor(Math.random() * 8),
 			holdLeft: 0,
-			decay:    0.005 + Math.random() * 0.005,
-			width:    1.5 + Math.random() * 2
+			decay: 0.008 + Math.random() * 0.008,
+			width: 0.4 + Math.random() * 0.8,
+			color: Math.random() > 0.3
+				? { glow: 'rgba(180,160,255,0.5)', mid: 'rgba(210,190,255,0.8)', core: '#fff' }
+				: { glow: 'rgba(255,240,120,0.4)', mid: 'rgba(255,250,180,0.7)', core: '#fff' },
 		});
 	}
 
-	function drawBolt(pts, alpha, width) {
+	function drawBoltPts(pts, alpha, width, color) {
 		if (pts.length < 2) return;
 		ctx.save();
 		ctx.globalAlpha = alpha;
 		ctx.lineCap = 'round';
-		ctx.lineJoin = 'round';
+		ctx.lineJoin = 'miter';
 
-		// Outer glow — soft pink-white
-		ctx.shadowColor = 'rgba(255,210,230,0.7)';
-		ctx.shadowBlur  = 30;
-		ctx.strokeStyle = 'rgba(255,215,230,0.3)';
-		ctx.lineWidth   = width * 4.5;
-		drawSmooth(pts);
+		ctx.beginPath();
+		ctx.moveTo(pts[0].x, pts[0].y);
+		for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
 
-		// Mid layer
-		ctx.shadowBlur  = 12;
-		ctx.strokeStyle = 'rgba(255,235,242,0.65)';
-		ctx.lineWidth   = width * 1.6;
-		drawSmooth(pts);
+		// Зовнішнє glow
+		ctx.shadowColor = color.glow;
+		ctx.shadowBlur = 10;
+		ctx.strokeStyle = color.glow;
+		ctx.lineWidth = width * 3.5;
+		ctx.stroke();
 
-		// White core
-		ctx.shadowBlur  = 4;
+		// Середній шар
+		ctx.shadowBlur = 5;
+		ctx.strokeStyle = color.mid;
+		ctx.lineWidth = width * 1.2;
+		ctx.stroke();
+
+		// Білий core — найтонший
+		ctx.shadowBlur = 2;
 		ctx.shadowColor = '#fff';
-		ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-		ctx.lineWidth   = width * 0.4;
-		drawSmooth(pts);
+		ctx.strokeStyle = color.core;
+		ctx.lineWidth = width * 0.35;
+		ctx.stroke();
 
 		ctx.restore();
 	}
 
-	// Max 2 bolts alive at once to avoid clutter
-	const MAX_BOLTS = 2;
+	// До 8 блискавок одночасно, нова кожні 150-500ms
+	const MAX_BOLTS = 8;
 	let nextSpawn = 0;
 
 	function loop(ts) {
@@ -1464,7 +1450,7 @@ function initBackgroundLightning() {
 
 		if (ts > nextSpawn && bolts.length < MAX_BOLTS) {
 			spawnBolt();
-			nextSpawn = ts + 600 + Math.random() * 1400;
+			nextSpawn = ts + 150 + Math.random() * 350;
 		}
 
 		for (let i = bolts.length - 1; i >= 0; i--) {
@@ -1479,8 +1465,8 @@ function initBackgroundLightning() {
 				b.alpha -= b.decay;
 			}
 
-			drawBolt(b.pts, b.alpha, b.width);
-			if (b.branch) drawBolt(b.branch, b.alpha * 0.55, b.width * 0.55);
+			drawBoltPts(b.pts, b.alpha, b.width, b.color);
+			b.branches.forEach(br => drawBoltPts(br, b.alpha * 0.5, b.width * 0.6, b.color));
 
 			if (b.alpha <= 0) bolts.splice(i, 1);
 		}
