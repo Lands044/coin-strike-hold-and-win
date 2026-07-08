@@ -1,4 +1,4 @@
-$gold: #ffb921;
+$gray: #5b6176;
 $gold-light: #f5d77a;
 $orange-border: #fe851c;
 $red: #8b1a1a;
@@ -152,17 +152,17 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	align-items: center;
 	justify-content: center;
 	position: absolute;
-	bottom: -5%;
+	bottom: 0;
 	left: 50%;
 	max-width: 460px;
 	width: 100%;
 	height: 100%;
 	transform: translateX(-50%);
-	z-index: 50;
+	z-index: 100;
 
 	@media (max-width: toEm($mobile)) {
-		max-width: vw(260);
-		bottom: -10%;
+		max-width: vw(200);
+		bottom: -15%;
 	}
 
 	img {
@@ -416,7 +416,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		}
 
 		&.active {
-			border-color: $gold;
+			border-color: $gray;
 			box-shadow: 0 0 vw(16) rgba(255, 185, 33, 0.6);
 
 			.side-btn__icon--autoplay {
@@ -453,12 +453,12 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	justify-content: center;
 	overflow: hidden;
 	position: relative;
-	max-width: 800px;
+	max-width: 830px;
 	width: 100%;
-	border: vw(3) solid $gold;
-	box-shadow: 0 0 vw(20) rgba(255, 185, 33, 0.5), inset 0 0 vw(10) rgba(255, 185, 33, 0.2);
+	// border: vw(3) solid $gray;
+	// box-shadow: 0 0 vw(20) rgba(255, 185, 33, 0.5), inset 0 0 vw(10) rgba(255, 185, 33, 0.2);
 	padding: vw(6) vw(6);
-	border-radius: vw(12);
+	// border-radius: vw(12);
 
 	&::after {
 		position: absolute;
@@ -467,7 +467,8 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
+		// background-color: rgba(0, 0, 0, 0.5);
+		background: url('../../../assets/img/drum.webp') center/cover no-repeat;
 	}
 
 	@media (max-width: toEm($mobile)) {
@@ -483,11 +484,11 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		grid-template-columns: repeat(3, 1fr);
 		position: relative;
 		z-index: 10;
-		border: vw(3) solid $orange-border;
-		box-shadow: 0 0 vw(8) rgba(254, 133, 28, 0.5);
+		// border: vw(3) solid #34373e;
+		// box-shadow: 0 0 vw(8) rgba(254, 133, 28, 0.5);
 		border-radius: vw(8);
 		gap: vw(4);
-		padding: vw(4);
+		padding: vw(4) vw(20);
 
 		@media (max-width: toEm($mobile)) {
 			border-width: 2px;
@@ -501,12 +502,12 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		position: relative;
 		overflow: hidden;
 		z-index: 10;
-		border: vw(2) solid rgba(255, 185, 33, 0.3);
+		// border: vw(2) solid rgba(255, 185, 33, 0.3);
 		border-radius: vw(6);
 		height: vw(465);
 
 		@media (max-width: toEm($mobile)) {
-			height: calc(100px * 3);
+			height: calc(65px * 3);
 			border-width: 1px;
 			border-radius: 4px;
 		}
@@ -531,7 +532,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		width: 100%;
 		height: vw(155);
 		flex-shrink: 0;
-		padding: vw(8);
+		padding: vw(2);
 		position: relative;
 		z-index: 3;
 
@@ -542,7 +543,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		}
 
 		@media (max-width: toEm($mobile)) {
-			height: 100px;
+			height: 65px;
 			padding: 0;
 		}
 
@@ -939,7 +940,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 
 .payline {
 	fill: none;
-	stroke: $gold;
+	stroke: $gray;
 	stroke-width: vw(5);
 	stroke-linecap: round;
 	stroke-linejoin: round;
