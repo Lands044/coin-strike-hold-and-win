@@ -75,6 +75,10 @@ class SlotMachine {
 			win: new Audio(`${this.baseUrl}assets/sound/win.mp3`)
 		};
 
+		// Фонова музика (безкінечний повтор)
+		this.musicTrack = new Audio(`${this.baseUrl}assets/sound/play-music.mp3`);
+		this.musicTrack.loop = true;
+
 		// Іконки (10 типів)
 		this.icons = 10;
 		this.iconsPerReel = 100;
@@ -187,6 +191,9 @@ class SlotMachine {
 	}
 
 	init() {
+		// Запускаємо фонову музику одразу після завантаження сторінки
+		this.playBackgroundMusic();
+
 		// Створюємо структуру барабанів зі стрічками
 		this.createReels();
 
@@ -1030,10 +1037,29 @@ class SlotMachine {
 
 		if (this.isSoundEnabled) {
 			this.soundButton.classList.remove('sound-off');
+			this.playBackgroundMusic();
 		} else {
 			this.soundButton.classList.add('sound-off');
 			this.stopAllSounds();
 		}
+	}
+
+	// Запускає фонову музику на повторі; якщо браузер блокує автоплей,
+	// запускає трек при першій взаємодії користувача зі сторінкою
+	playBackgroundMusic() {
+		if (!this.isSoundEnabled || !this.musicTrack) return;
+
+		this.musicTrack.play().catch(() => {
+			const resumeOnInteraction = () => {
+				this.musicTrack.play().catch(() => {});
+				document.removeEventListener('click', resumeOnInteraction);
+				document.removeEventListener('keydown', resumeOnInteraction);
+				document.removeEventListener('touchstart', resumeOnInteraction);
+			};
+			document.addEventListener('click', resumeOnInteraction, { once: true });
+			document.addEventListener('keydown', resumeOnInteraction, { once: true });
+			document.addEventListener('touchstart', resumeOnInteraction, { once: true });
+		});
 	}
 
 	// Відтворення звуку
@@ -1055,6 +1081,10 @@ class SlotMachine {
 			sound.pause();
 			sound.currentTime = 0;
 		});
+
+		if (this.musicTrack) {
+			this.musicTrack.pause();
+		}
 	}
 
 	// Блокує кнопки спіну
