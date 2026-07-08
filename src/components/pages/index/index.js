@@ -75,8 +75,8 @@ class SlotMachine {
 			win: new Audio(`${this.baseUrl}assets/sound/win.mp3`)
 		};
 
-		// Іконки (8 типів)
-		this.icons = 8;
+		// Іконки (10 типів)
+		this.icons = 10;
 		this.iconsPerReel = 100;
 
 		// Елементи Lines

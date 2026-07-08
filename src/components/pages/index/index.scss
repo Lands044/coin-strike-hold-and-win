@@ -1,4 +1,4 @@
-$gray: #5b6176;
+$gold: #ffb921;
 $gold-light: #f5d77a;
 $orange-border: #fe851c;
 $red: #8b1a1a;
@@ -16,7 +16,6 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 // Page
 // ─────────────────────────────────────────
 .page {
-	background: linear-gradient(180deg, #3a1a6e 0%, #5a2d91 40%, #6b35a8 70%, #7a3fbf 100%);
 	background: url('../../../assets/img/bg.webp') center/cover no-repeat;
 	min-height: 100vh;
 	min-height: 100dvh;
@@ -31,7 +30,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		padding: 60px 0 20px;
 
 		@media (max-width:toEm($mobile)){
-			padding: 0 15px;
+			padding: 0 12px;
 		}
 	}
 }
@@ -53,21 +52,18 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		flex: 1;
 		display: grid;
 		grid-template-columns: vw(200) 1fr vw(200);
-		gap: 0;
+		gap: 20px;
 		align-items: stretch;
 		min-height: 0;
 
 		@media (max-width:toEm($tablet)){
-			grid-template-columns: vw(120) 1fr vw(120);
+			grid-template-columns: vw(0) 1fr vw(120);
+			gap: 60px;
 		}
 
 		@media (max-width: toEm($mobile)) {
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
-		}
-
-		@media (max-height:toEm(720)) {
 			gap: 5px;
 		}
 	}
@@ -87,7 +83,6 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		@media (max-width: toEm($mobile)) {
 			align-items: center;
 			flex-direction: row;
-			
 		}
 
 		&--left {
@@ -416,7 +411,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		}
 
 		&.active {
-			border-color: $gray;
+			border-color: $gold;
 			box-shadow: 0 0 vw(16) rgba(255, 185, 33, 0.6);
 
 			.side-btn__icon--autoplay {
@@ -455,10 +450,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	position: relative;
 	max-width: 830px;
 	width: 100%;
-	// border: vw(3) solid $gray;
-	// box-shadow: 0 0 vw(20) rgba(255, 185, 33, 0.5), inset 0 0 vw(10) rgba(255, 185, 33, 0.2);
 	padding: vw(6) vw(6);
-	// border-radius: vw(12);
 
 	&::after {
 		position: absolute;
@@ -467,14 +459,33 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		left: 0;
 		width: 100%;
 		height: 100%;
-		// background-color: rgba(0, 0, 0, 0.5);
 		background: url('../../../assets/img/drum.webp') center/cover no-repeat;
+	}
+
+	@media (max-width:toEm(1220)){
+		border: vw(3) solid $gold;
+		box-shadow: 0 0 vw(20) rgba(255, 185, 33, 0.5), inset 0 0 vw(10) rgba(255, 185, 33, 0.2);
+		border-radius: vw(12);
+
+		&::after {
+			background: rgba(0, 0, 0, 0.5);
+		}
 	}
 
 	@media (max-width: toEm($mobile)) {
 		padding: 3px;
 		border-width: 2px;
 		border-radius: 8px;
+	}
+
+	@media (max-width:toEm($mobileSmall)){
+		border: none;
+		border-radius: 0;
+		box-shadow: none;
+
+		&::after {
+			background: url('../../../assets/img/drum.webp') center/cover no-repeat;
+		}
 	}
 
 	&__spinner {
@@ -484,11 +495,15 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		grid-template-columns: repeat(3, 1fr);
 		position: relative;
 		z-index: 10;
-		// border: vw(3) solid #34373e;
-		// box-shadow: 0 0 vw(8) rgba(254, 133, 28, 0.5);
 		border-radius: vw(8);
 		gap: vw(4);
 		padding: vw(4) vw(20);
+
+		@media (max-width:toEm(1220)) {
+			border: vw(3) solid #34373e;
+			box-shadow: 0 0 vw(8) rgba(254, 133, 28, 0.5);
+			padding: vw(4);
+		}
 
 		@media (max-width: toEm($mobile)) {
 			border-width: 2px;
@@ -496,20 +511,33 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 			gap: 2px;
 			padding: 2px;
 		}
+
+		@media (max-width:toEm($mobileSmall)){
+			border: none;
+			box-shadow: none;
+			padding: vw(4) vw(10);
+		}
 	}
 
 	&__column {
 		position: relative;
 		overflow: hidden;
 		z-index: 10;
-		// border: vw(2) solid rgba(255, 185, 33, 0.3);
 		border-radius: vw(6);
 		height: vw(465);
+
+		@media (max-width:toEm(1220)) {
+			border: vw(2) solid rgba(255, 185, 33, 0.3);
+		}
 
 		@media (max-width: toEm($mobile)) {
 			height: calc(65px * 3);
 			border-width: 1px;
 			border-radius: 4px;
+		}
+
+		@media (max-width:toEm($mobileSmall)){
+			border: none;
 		}
 	}
 
@@ -940,7 +968,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 
 .payline {
 	fill: none;
-	stroke: $gray;
+	stroke: $gold;
 	stroke-width: vw(5);
 	stroke-linecap: round;
 	stroke-linejoin: round;
@@ -999,7 +1027,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	}
 
 	&__inner {
-		background: linear-gradient(135deg, #9a1875 0%, #ff37e4 100%);
+		background: linear-gradient(135deg, #231e55 0%, #113f74 100%);
 		border: vw(4) solid #ffd700;
 		border-radius: vw(30);
 		padding: vw(50) vw(60);
