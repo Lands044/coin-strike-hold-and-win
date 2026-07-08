@@ -258,6 +258,14 @@ class SlotMachine {
 			});
 		});
 
+		// Кнопки що відкривають попап одразу (без затримки)
+		document.querySelectorAll('.menu__action-btn').forEach((btn) => {
+			btn.addEventListener('click', (e) => {
+				e.preventDefault();
+				this.openPopup();
+			});
+		});
+
 		// Оновлюємо UI
 		this.updateUI();
 	}
@@ -1004,13 +1012,16 @@ class SlotMachine {
 		this.buttonsWrap.classList.add('hidden');
 
 		setTimeout(() => {
-			this.popup.classList.add('show');
-
-			// Запускаємо анімацію конфеті
-			if (!this.confettiAnimation) {
-				this.confettiAnimation = new ConfettiAnimation(this.popup);
-			}
+			this.openPopup();
 		}, 1500);
+	}
+
+	openPopup() {
+		this.popup.classList.add('show');
+
+		if (!this.confettiAnimation) {
+			this.confettiAnimation = new ConfettiAnimation(this.popup);
+		}
 	}
 
 	// Перемикання звуку
