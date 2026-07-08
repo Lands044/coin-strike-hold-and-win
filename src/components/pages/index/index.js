@@ -552,9 +552,12 @@ class SlotMachine {
 	showResult(result) {
 		return new Promise((resolve) => {
 			if (result.type === 'bigwin') {
+				const dur = 2500;
 				this.playSound('win');
 				this.drumSpinner.classList.add('bigwin-animation');
 				this.createWinEffects();
+				this.launchCoinsToLogo(18);
+				this.showWinCounter(result.winAmount, dur);
 
 				if (result.winLine) {
 					this.drawWinAnimation(result.winLine);
@@ -565,11 +568,14 @@ class SlotMachine {
 					this.removeWinAnimation();
 					this.enableSpinButtons();
 					resolve();
-				}, 2000);
+				}, dur);
 
 			} else if (result.type === 'smallwin') {
+				const dur = 2000;
 				this.playSound('win');
 				this.drumSpinner.classList.add('smallwin-animation');
+				this.launchCoinsToLogo(10);
+				this.showWinCounter(result.winAmount, dur);
 
 				if (result.winLine) {
 					this.drawWinAnimation(result.winLine);
@@ -580,7 +586,7 @@ class SlotMachine {
 					this.removeWinAnimation();
 					this.enableSpinButtons();
 					resolve();
-				}, 1500);
+				}, dur);
 
 			} else {
 				this.enableSpinButtons();
@@ -971,6 +977,94 @@ class SlotMachine {
 				setTimeout(() => flash.remove(), 600);
 			}, i * 120);
 		}
+	}
+
+	// Монетки летять з барабана до лого при виграші
+	launchCoinsToLogo(count = 14) {
+		const drumRect = this.linesContainer.getBoundingClientRect();
+		const logoImg = document.querySelector('.logo img');
+		if (!logoImg) return;
+		const logoRect = logoImg.getBoundingClientRect();
+
+		const targetX = logoRect.left + logoRect.width / 2;
+		const targetY = logoRect.top + logoRect.height / 2;
+
+		let landed = 0;
+
+		for (let i = 0; i < count; i++) {
+			setTimeout(() => {
+				const coin = document.createElement('div');
+				coin.className = 'win-coin';
+
+				// старт — рандомна точка всередині барабана
+				const startX = drumRect.left + drumRect.width * 0.2 + Math.random() * drumRect.width * 0.6;
+				const startY = drumRect.top + drumRect.height * 0.2 + Math.random() * drumRect.height * 0.6;
+
+				coin.style.left = `${startX}px`;
+				coin.style.top = `${startY}px`;
+
+				const tx = targetX - startX;
+				const ty = targetY - startY;
+				coin.style.setProperty('--tx', `${tx}px`);
+				coin.style.setProperty('--ty', `${ty}px`);
+				coin.style.setProperty('--rot', `${(Math.random() - 0.5) * 720}deg`);
+
+				// невелика дуга вгору через midpoint
+				const arcY = Math.min(ty * 0.4, -60) - Math.random() * 80;
+				coin.style.setProperty('--arc', `${arcY}px`);
+
+				document.body.appendChild(coin);
+
+				const flyDuration = 700 + Math.random() * 300;
+				coin.style.animationDuration = `${flyDuration}ms`;
+
+				setTimeout(() => {
+					coin.remove();
+					landed++;
+					// коли всі монети долетіли — лого підстрибує
+					if (landed === count) {
+						if (logoImg) {
+							logoImg.classList.add('logo-bounce');
+							setTimeout(() => logoImg.classList.remove('logo-bounce'), 700);
+						}
+					}
+				}, flyDuration);
+			}, i * 80);
+		}
+	}
+
+	// WIN лічильник — з'являється знизу барабана, рахує від 0 до winAmount
+	showWinCounter(winAmount, duration) {
+		const field = this.linesContainer.closest('.game__field') || this.linesContainer;
+
+		const counter = document.createElement('div');
+		counter.className = 'win-counter';
+		counter.innerHTML = `<span class="win-counter__label">WIN</span><span class="win-counter__value">0.00</span>`;
+		field.appendChild(counter);
+
+		requestAnimationFrame(() => counter.classList.add('visible'));
+
+		const valueEl = counter.querySelector('.win-counter__value');
+		const countDuration = Math.min(duration * 0.7, 1200);
+		const startTime = performance.now();
+
+		function tick(now) {
+			const elapsed = now - startTime;
+			const progress = Math.min(elapsed / countDuration, 1);
+			const eased = 1 - Math.pow(1 - progress, 3);
+			valueEl.textContent = (winAmount * eased).toFixed(2);
+			if (progress < 1) {
+				requestAnimationFrame(tick);
+			} else {
+				valueEl.textContent = winAmount.toFixed(2);
+			}
+		}
+		requestAnimationFrame(tick);
+
+		setTimeout(() => {
+			counter.classList.remove('visible');
+			setTimeout(() => counter.remove(), 300);
+		}, duration);
 	}
 
 	// Показ CTA popup
