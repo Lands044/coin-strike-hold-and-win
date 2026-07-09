@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="shortcut icon" href="./assets/img/favicon.ico">
+		<title>Coin Strike: Hold and Win</title>
+		<script type="module" crossorigin="" src="./js/index.min.js?v=1783610139308"></script>
+		<link rel="modulepreload" crossorigin="" href="./js/common.min.js?v=1783610139308">
+		<link rel="stylesheet" crossorigin="" href="./css/index.min.css?v=1783610139308">
+	</head>
+	<body>
+		<div class="wrapper">
+			<main class="page">
+				<div class="page__container">
+					<div class="game">
+						<!-- Main area: sidebar left + drum + sidebar right -->
+						<div class="game__main">
+							<!-- Left sidebar -->
+							<div class="game__sidebar game__sidebar--left"></div>
+							<!-- Drum + Jackpots above it -->
+							<div class="game__field">
+								<!-- Jackpots top row — same width as drum -->
+								<div class="jackpots" id="jackpots">
+									<div class="jackpots__wrap">
+										<div class="jackpot jackpot--grand">
+											<span class="jackpot__label">GRAND</span>
+											<span class="jackpot__value">1000.00</span>
+										</div>
+										<div class="jackpot jackpot--minor">
+											<span class="jackpot__label">MINOR</span>
+											<span class="jackpot__value">50.00</span>
+										</div>
+									</div>
+									<div class="logo">
+										<img alt="Game logo" fetchpriority="high" src="./assets/img/logo.webp">
+									</div>
+									<div class="jackpots__wrap">
+										<div class="jackpot jackpot--major">
+											<span class="jackpot__label">MAJOR</span>
+											<span class="jackpot__value">150.00</span>
+										</div>
+										<div class="jackpot jackpot--mini">
+											<span class="jackpot__label">MINI</span>
+											<span class="jackpot__value">25.00</span>
+										</div>
+									</div>
+								</div>
+								<div class="drum">
+									<!-- Center win-line highlight overlay -->
+									<div class="drum__payline"></div>
+									<div class="drum__spinner">
+										<div class="drum__column">
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-1.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-2.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-3.webp">
+											</div>
+										</div>
+										<div class="drum__column">
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-5.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-6.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-7.webp">
+											</div>
+										</div>
+										<div class="drum__column">
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-1.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-2.webp">
+											</div>
+											<div class="drum__image">
+												<img alt="Icon game" src="./assets/img/icon/icon-3.webp">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Right sidebar -->
+							<div class="game__sidebar game__sidebar--right">
+								<a href="#" class="side-btn side-btn--autoplay menu__button-autoplay">
+									<span class="side-btn__icon side-btn__icon--autoplay"></span>
+								</a>
+								<a href="#" class="side-btn side-btn--turbo menu__button-spin">
+									<span class="side-btn__icon side-btn__icon--turbo"></span>
+								</a>
+								<a href="#" class="side-btn side-btn--fast menu__button-auto">
+									<span class="side-btn__icon side-btn__icon--fast"></span>
+								</a>
+							</div>
+						</div>
+						<!-- Bottom info bar -->
+						<div class="menu">
+							<div class="menu__info-block">
+								<span class="menu__info-label">CREDIT</span>
+								<span class="menu__info-value menu__info">
+									<span class="number">1000.00</span>
+								</span>
+							</div>
+							<div class="menu__info-block last-win" data-fls-dynamic=".game__main, 767.98, first">
+								<span class="menu__info-label">LAST WIN</span>
+								<span class="menu__info-value menu__info-win">
+									<span class="number">0.00</span>
+								</span>
+							</div>
+							<div class="menu__bet-control" data-fls-dynamic=".game__main, 767.98, last">
+								<button class="menu__bet-arrow menu__button-arrow reduce" aria-label="Decrease bet">−</button>
+								<div class="menu__bet-center">
+									<span class="menu__info-label">BET</span>
+									<span class="menu__info-value menu__bet-value">
+										<span class="number">1.00</span>
+									</span>
+								</div>
+								<button class="menu__bet-arrow menu__button-arrow increase" aria-label="Increase bet">+</button>
+							</div>
+							<div class="menu__actions">
+								<a href="#" class="menu__sound-btn menu__sound side-btn side-btn--sound">
+									<span class="side-btn__icon side-btn__icon--sound"></span>
+								</a>
+								<button class="menu__action-btn" aria-label="Info">
+									<span class="menu__action-icon menu__action-icon--info"></span>
+								</button>
+								<button class="menu__action-btn" aria-label="Menu">
+									<span class="menu__action-icon menu__action-icon--hamburger"></span>
+								</button>
+							</div>
+							<!-- Hidden element needed by JS for showCTA -->
+							<div class="menu__bottom hidden"></div>
+						</div>
+					</div>
+					<div class="popup">
+						<div class="popup__overlay"></div>
+						<div class="popup__content">
+							<div class="popup__inner">
+								<h2 class="popup__title">Congratulations!</h2>
+								<p class="popup__text">Ready to continue playing?</p>
+								<a class="cta-button" href="#">Download Now</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		<div class="rotate-overlay">
+			<div class="rotate-overlay__content">
+				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+					<rect x="4" y="2" width="16" height="20" rx="2"></rect>
+					<path d="M12 18h.01"></path>
+				</svg>
+				<p>Please rotate your device to portrait mode</p>
+			</div>
+		</div>
+	</body>
+</html>
