@@ -27,7 +27,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		align-items: center;
 		justify-content: center;
 		flex: 1;
-		padding: 60px 0 20px;
+		padding: 40px 0 20px;
 
 		@media (max-width:toEm($mobile)){
 			padding: 0 12px;
@@ -64,7 +64,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		@media (max-width: toEm($mobile)) {
 			display: flex;
 			flex-direction: column;
-			gap: 5px;
+			gap: 15px;
 		}
 	}
 
@@ -108,11 +108,12 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		align-items: center;
 		justify-content: center;
 		padding: 0;
-		gap: 0;
+		gap: 20px;
 		position: relative;
 
 		@media (max-width:toEm($mobile)){
 			order: 2;
+			gap: 10px;
 		}
 	}
 }
@@ -125,9 +126,8 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	align-items: center;
 	justify-content: space-between;
 	row-gap: vw(10);
-	max-width: 800px;
+	max-width: 830px;
 	width: 100%;
-	padding: 0 vw(6) 0;
 	position: relative;
 
 	@media (max-width: toEm($mobile)) {
@@ -136,10 +136,14 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	}
 
 	&__wrap {
-		max-width: 100%;
+		width: 100%;
 		display: flex;
 		flex-direction: column;
-		gap: 26px;
+		gap: 30px;
+
+		@media (max-width:toEm($mobile)){
+			gap: 20px; 
+		}
 	}
 }
 
@@ -148,17 +152,17 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	align-items: center;
 	justify-content: center;
 	position: absolute;
-	bottom: 0;
+	bottom: -15%;
 	left: 50%;
 	max-width: 460px;
 	width: 100%;
 	height: 100%;
 	transform: translateX(-50%);
-	z-index: 100;
+	z-index: 500;
 
 	@media (max-width: toEm($mobile)) {
 		max-width: vw(200);
-		bottom: -15%;
+		bottom: -26%;
 	}
 
 	img {
@@ -179,7 +183,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	position: relative;
 	// Gold outer border around entire card
 	border: vw(3) solid #d4a017;
-	border-radius: vw(8) vw(8) vw(6) vw(6);
+	border-radius: vw(8);
 	box-shadow:
 		0 0 vw(12) rgba(212, 160, 23, 0.7),
 		inset 0 0 vw(4) rgba(255, 215, 100, 0.3);
@@ -189,7 +193,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 
 	@media (max-width: toEm($mobile)) {
 		border-width: 2px;
-		border-radius: 6px 6px 4px 4px;
+		border-radius: 6px;
 	}
 
 	// Oval label tab on top
@@ -236,6 +240,11 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	&--grand {
 		background: linear-gradient(180deg, #e8a000 0%, #ffcd36 60%, #ffad14 100%);
 		justify-self: flex-start;
+		max-width: 220px;
+
+		@media (max-width:toEm($mobile)){
+			max-width: 120px;
+		}
 
 		.jackpot__label {
 			color: #8b1a00;
@@ -249,7 +258,12 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	// MAJOR — magenta/pink body
 	&--major {
 		background: linear-gradient(180deg, #d0006e 0%, #a0005a 60%, #700040 100%);
-		justify-self: flex-start;
+		align-self: flex-end;
+		max-width: 220px;
+
+		@media (max-width:toEm($mobile)) {
+			max-width: 120px;
+		}
 
 		.jackpot__label {
 			color: #6b003a;
@@ -264,6 +278,11 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	&--minor {
 		background: linear-gradient(180deg, #1a5ec8 0%, #1040a0 60%, #0a2878 100%);
 		justify-self: flex-end;
+		max-width: 160px;
+
+		@media (max-width:toEm($mobile)) {
+			max-width: 85px;
+		}
 
 		.jackpot__label {
 			color: #00247a;
@@ -277,7 +296,12 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 	// MINI — green body
 	&--mini {
 		background: linear-gradient(180deg, #2a8a00 0%, #1a6a00 60%, #0e4800 100%);
-		justify-self: flex-end;
+		align-self: flex-end;
+		max-width: 160px;
+
+		@media (max-width:toEm($mobile)) {
+			max-width: 85px;
+		}
 
 		.jackpot__label {
 			color: #0e4800;
@@ -796,7 +820,7 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 		align-items: center;
 		justify-content: center;
 		cursor: default;
-		opacity: 0.75;
+		opacity: 0.5;
 		padding: 0;
 
 		@media (max-width: toEm($mobile)) {
@@ -892,19 +916,19 @@ $frameGradient: linear-gradient(145deg, #f2a527 0%, #FFB300 50%, #f39f0f 100%);
 
 .win-line {
 	fill: none;
-	stroke: #ffcc00;
-	stroke-width: vw(6);
+	stroke: #2563eb;
+	stroke-width: vw(9);
 	stroke-linecap: round;
 	stroke-linejoin: round;
-	filter: drop-shadow(0 0 vw(8) rgba(255, 200, 0, 0.8));
+	filter: drop-shadow(0 0 vw(8) rgba(37, 99, 235, 0.8));
 	animation: lineGlow 0.5s ease-in-out infinite alternate;
 }
 
 .win-line-dot {
 	fill: #fff;
-	stroke: #ffcc00;
+	stroke: #2563eb;
 	stroke-width: vw(3);
-	filter: drop-shadow(0 0 vw(6) rgba(255, 200, 0, 0.9));
+	filter: drop-shadow(0 0 vw(6) rgba(37, 99, 235, 0.9));
 	animation: dotPulse 0.4s ease-in-out infinite alternate;
 }
 
