@@ -74,7 +74,6 @@ class SlotMachine {
 			spin: new Audio(`${this.baseUrl}assets/sound/spin.mp3`),
 			win: new Audio(`${this.baseUrl}assets/sound/win.mp3`)
 		};
-		// Завантажуємо метадані заздалегідь, щоб знати тривалість spin.mp3 до першого спіну
 		this.sounds.spin.preload = 'auto';
 		this.sounds.spin.load();
 
@@ -443,11 +442,8 @@ class SlotMachine {
 		const columns = this.drumSpinner.querySelectorAll('.drum__column');
 		const cascadeDelay = 100;
 
-		// Підганяємо тривалість обертання під довжину звуку spin.mp3,
-		// щоб останній барабан зупинявся синхронно із закінченням звуку
-		const totalSpinTime = this.getSpinSoundDuration();
-		const lastColIndex = columns.length - 1;
-		const duration = Math.max(500, totalSpinTime - lastColIndex * cascadeDelay);
+		// Фіксоване значення обертання спінів
+		const duration = 4000;
 
 		// Запускаємо анімацію кожної колонки з затримкою
 		const spinPromises = Array.from(columns).map((column, colIndex) => {
@@ -460,13 +456,6 @@ class SlotMachine {
 		});
 
 		await Promise.all(spinPromises);
-	}
-
-	// Тривалість звуку spin.mp3 у мілісекундах (з фолбеком, поки метадані не завантажені)
-	getSpinSoundDuration() {
-		const sound = this.sounds.spin;
-		const seconds = sound && sound.duration && !isNaN(sound.duration) ? sound.duration : 3;
-		return seconds * 1000;
 	}
 
 	// Анімація обертання однієї колонки
@@ -1536,7 +1525,7 @@ function initBackgroundLightning() {
 			branches,
 			alpha: 0,
 			phase: 'in',
-			fadeIn: 0.04 + Math.random() * 0.03,
+			fadeIn: 0.02 + Math.random() * 0.015,
 			holdFor: 6 + Math.floor(Math.random() * 8),
 			holdLeft: 0,
 			decay: 0.008 + Math.random() * 0.008,
@@ -1581,8 +1570,8 @@ function initBackgroundLightning() {
 		ctx.restore();
 	}
 
-	// До 8 блискавок одночасно, нова кожні 150-500ms
-	const MAX_BOLTS = 8;
+	// До 4 блискавок одночасно, нова кожні 150-500ms
+	const MAX_BOLTS = 2;
 	let nextSpawn = 0;
 
 	function loop(ts) {
@@ -1590,7 +1579,7 @@ function initBackgroundLightning() {
 
 		if (ts > nextSpawn && bolts.length < MAX_BOLTS) {
 			spawnBolt();
-			nextSpawn = ts + 150 + Math.random() * 350;
+			nextSpawn = ts + 800 + Math.random() * 1600;
 		}
 
 		for (let i = bolts.length - 1; i >= 0; i--) {
