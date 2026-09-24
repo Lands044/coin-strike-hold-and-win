@@ -16,9 +16,26 @@ export function mergeConfig(base, patch) {
 		if (key.startsWith('$')) continue
 		if (isPlainObject(value) && isPlainObject(out[key])) {
 			out[key] = mergeConfig(out[key], value)
+		} else if (isPlainObject(value) && Array.isArray(out[key])) {
+			// An index-keyed patch ({ "0": {...} }) — what the devmenu builds for a
+			// field path like `game.spins.desktop.0.type`. Merge it into the array
+			// entry by entry instead of replacing the array with a plain object.
+			out[key] = mergeArray(out[key], value)
 		} else if (value !== undefined) {
 			out[key] = structuredClone(value)
 		}
+	}
+	return out
+}
+
+function mergeArray(base, patch) {
+	const out = structuredClone(base)
+	for (const [key, value] of Object.entries(patch)) {
+		const index = Number(key)
+		if (!Number.isInteger(index) || index < 0 || value === undefined) continue
+		out[index] = isPlainObject(value) && isPlainObject(out[index])
+			? mergeConfig(out[index], value)
+			: structuredClone(value)
 	}
 	return out
 }
